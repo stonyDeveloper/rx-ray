@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model GreenbookProduct {
+  id              String    @id @default(cuid())
+  productId       Int       @unique
+  productName     String
+  regNo           String
+  normalizedRegNo String
+  applicantName   String
+  categoryId      Int
+  categoryName    String
+  status          String
+  approvalDate    DateTime?
+  expiryDate      DateTime?
+  strength        String?
+  formName        String?
+  ingredientName  String?
+  syncedAt        DateTime  @default(now())
+
+  @@index([normalizedRegNo])
+  @@index([productName])
+}
+
+model RecallAlert {
+  id           String    @id @default(cuid())
+  title        String
+  date         DateTime?
+  type         String?
+  productType  String?
+  manufacturer String?
+  detailUrl    String?
+  syncedAt     DateTime  @default(now())
+
+  @@index([title])
+  @@index([manufacturer])
+}
