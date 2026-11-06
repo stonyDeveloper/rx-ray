@@ -106,7 +106,7 @@ generated/prisma/         Prisma client output (generated, not committed)
 
 ### Prerequisites
 
-- **Node.js 20.6+** (22 LTS recommended) and npm
+- **Node.js 20.9+** (22 LTS recommended) and npm
 - A **Google Gemini API key** — <https://aistudio.google.com/apikey>
 - No external database needed: the SQLite snapshot ships with the repo.
 
@@ -172,7 +172,7 @@ Deliberate choices:
 - **No category filter.** A registration number can belong to drugs, food, cosmetics, devices, or veterinary products. Filtering to "drugs" would make legitimate non-drug packs look unregistered.
 - **A committed snapshot.** The app reads a local SQLite file, so it works offline and on serverless hosting. The trade-off is freshness: a snapshot can lag the live register by days, and the UI always shows the snapshot date.
 
-The committed snapshot currently holds ~9,000 registrations (≈5,900 Active) across 6 categories.
+The committed snapshot currently holds ~9,000 registrations (≈5,900 Active) across drugs, herbals, medical devices, biologics, and veterinary products.
 
 ### Refreshing the snapshot
 

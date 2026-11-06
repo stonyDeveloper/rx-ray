@@ -16,7 +16,7 @@
     "db:check": "node --env-file=.env.local --import tsx scripts/check-one.ts"
   },
   "engines": {
-    "node": ">=20.6"
+    "node": ">=20.9"
   },
   "dependencies": {
     "@google/genai": "^2.30.0",
