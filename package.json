@@ -8,11 +8,15 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
+    "postinstall": "prisma generate",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:sync": "node --env-file=.env.local --import tsx scripts/sync-greenbook.ts",
     "db:check": "node --env-file=.env.local --import tsx scripts/check-one.ts"
+  },
+  "engines": {
+    "node": ">=20.6"
   },
   "dependencies": {
     "@google/genai": "^2.30.0",

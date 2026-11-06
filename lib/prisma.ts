@@ -11,7 +11,13 @@ function createPrismaClient() {
     throw new Error("Missing DATABASE_URL environment variable.");
   }
 
-  const adapter = new PrismaBetterSqlite3({ url });
+  const adapter = new PrismaBetterSqlite3({
+    url,
+    // The app only reads the register. Serverless filesystems (Vercel
+    // included) are read-only outside /tmp, so opening the snapshot
+    // read-write would fail there.
+    readonly: process.env.VERCEL === "1",
+  });
   return new PrismaClient({ adapter });
 }
 
