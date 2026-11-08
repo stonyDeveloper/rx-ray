@@ -52,5 +52,5 @@ next-env.d.ts
 # local scratch material
 /.scratch-test
 
-# editor / agent local settings
-.claude/settings.local.json
+# local agent/editor config (kept out of the repo)
+.claude/
