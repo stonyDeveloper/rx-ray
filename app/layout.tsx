@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Instrument_Serif, Inter, JetBrains_Mono } from "next/font/google";
 import MotionProvider from "@/components/MotionProvider";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -36,6 +36,11 @@ export const metadata: Metadata = {
       "A NAFDAC Greenbook checker for medicine packs in Nigeria. Registered, unreadable, or not in the register — never a bare 'fake' badge.",
     type: "website",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0b0c0a",
+  colorScheme: "light",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
