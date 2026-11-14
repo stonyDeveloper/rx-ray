@@ -6,7 +6,7 @@ import ScanTool from "@/components/ScanTool";
 export const metadata: Metadata = {
   title: "Scan a pack — Rx-Ray",
   description:
-    "Photograph a medicine pack and check its NAFDAC registration against the Greenbook. Registered, partial, not found, or needs a better photo.",
+    "Photograph a medicine pack — or type its NAFDAC registration number — and check it against the Greenbook. Registered, partial, not found, or needs a better photo.",
 };
 
 export const dynamic = "force-dynamic";

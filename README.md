@@ -46,7 +46,7 @@ photo ──▶ Gemini vision ──▶ extraction (5 fields + confidence)
                         four-outcome verdict + reason
 ```
 
-1. **Capture** — the user takes or uploads a photo of the pack (`/scan`).
+1. **Capture** — the user takes or uploads a photo of the pack, or types the registration number by hand when the print is worn, the light is bad, or the camera can't resolve it (`/scan`).
 2. **Extract** — `@google/genai` reads five fields: product name, NAFDAC registration number, batch number, expiry date, and manufacturer. The prompt forbids inferring or correcting anything that is not legible, and each field is tagged with a confidence level.
 3. **Match** — the registration number is looked up exactly (normalized: trimmed, uppercased, spaces removed) against the local Greenbook snapshot. If the number is missing, a distinctive-word name match is used as *supporting evidence only*.
 4. **Verdict** — the UI explains what matched, what didn't, and why.
@@ -200,6 +200,14 @@ curl -X POST http://localhost:3000/api/scan \
   -F "image=@pack.jpg"
 ```
 
+A typed number skips the model entirely — same matcher, no image:
+
+```bash
+curl -X POST http://localhost:3000/api/scan \
+  -H "Content-Type: application/json" \
+  -d '{"registrationNumber":"04-1928"}'
+```
+
 Success (`200`):
 
 ```json
@@ -221,15 +229,25 @@ Success (`200`):
       "status": "Active",
       "categoryName": "Drugs"
     }
-  }
+  },
+  "source": "photo",
+  "reported": false
 }
 ```
 
-Errors: `400` no image, `413` image too large, `500` missing API key, `502` model request or JSON-parse failure.
+`source` is `photo` or `manual`. `reported` is true only when a photo scan came back `not_found` **and** the report actually reached the configured webhook.
+
+Errors: `400` no image / invalid number, `413` image too large, `500` missing API key (photo only — manual entry still works), `502` model request or JSON-parse failure.
+
+### `POST /api/report`
+
+Explicit, user-initiated report for a `partial` or `not_found` result. Accepts `{ extraction, match }` as returned by `/api/scan` and posts to the same webhook with `source: "user"`. Returns `{ delivered: boolean }`; when no webhook is configured the UI offers a copy-the-details fallback rather than claiming a report was sent.
+
+Typed numbers are **never** auto-reported — one mistyped digit would file a false report.
 
 ### Reporting unregistered packs
 
-When the verdict is `not_found`, `lib/notify.ts` posts the extracted fields and the photo (base64) to `N8N_FLAGGED_WEBHOOK_URL` with a 5-second timeout. The call is awaited on purpose: on serverless, an un-awaited request can be frozen the moment the response is sent. If the variable is unset, reporting is a no-op.
+When a **photo** scan comes back `not_found`, `lib/notify.ts` posts the extracted fields and the photo (base64) to `N8N_FLAGGED_WEBHOOK_URL` with a 5-second timeout, and the response tells the UI whether it was delivered. `partial` results and typed numbers are only reported when the user taps **Report this pack**, via `POST /api/report`. If the variable is unset, nothing is sent and the UI says so — it never claims a report went out.
 
 **Privacy note:** photos are sent to Google's Gemini API for extraction, and — only for an unregistered pack — forwarded to the configured webhook.
 

@@ -6,7 +6,7 @@ const STEPS = [
     n: "01",
     title: "Photograph the pack",
     tag: "Photo",
-    copy: "Fill the frame with the NAFDAC number. It is the only field that can confirm a product; everything else is supporting evidence.",
+    copy: "Fill the frame with the NAFDAC number — or type it in if the print is worn. It is the only field that can confirm a product; everything else is supporting evidence.",
   },
   {
     n: "02",

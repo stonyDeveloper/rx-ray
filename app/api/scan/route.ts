@@ -36,11 +36,83 @@ function parseModelJson(text: string): ExtractionResult {
   return JSON.parse(cleaned);
 }
 
+/**
+ * A typed registration number is still a real verification input — it just
+ * carries no photo evidence. Everything except the number is explicitly
+ * not_visible so the matcher (and the UI) never pretends otherwise.
+ */
+function extractionFromNumber(regNo: string): ExtractionResult {
+  const nil = { value: null, confidence: "not_visible" as const };
+  return {
+    product_name: { ...nil },
+    nafdac_reg_no: { value: regNo, confidence: "clear" },
+    batch_no: { ...nil },
+    expiry_date: { ...nil },
+    manufacturer: { ...nil },
+  };
+}
+
+const REG_NO_PATTERN = /^[A-Z0-9][A-Z0-9/-]{2,23}$/;
+
+async function handleManual(body: unknown) {
+  const raw =
+    typeof (body as { registrationNumber?: unknown })?.registrationNumber === "string"
+      ? ((body as { registrationNumber: string }).registrationNumber ?? "").trim()
+      : "";
+
+  if (!raw) {
+    return NextResponse.json(
+      { error: "Enter a registration number." },
+      { status: 400 }
+    );
+  }
+
+  // Keep the printed dash (04-1928), drop spaces, normalise case.
+  const compact = raw.toUpperCase().replace(/\s+/g, "");
+
+  if (!REG_NO_PATTERN.test(compact)) {
+    return NextResponse.json(
+      {
+        error:
+          "That doesn't look like a NAFDAC registration number. Use the characters printed after “NAFDAC Reg. No”, for example 04-1928 or A4-100160.",
+      },
+      { status: 400 }
+    );
+  }
+
+  const extraction = extractionFromNumber(compact);
+  const match = await matchExtraction(extraction);
+
+  // Typed numbers are never auto-reported: a single mistyped digit would file
+  // a false report. The user can report explicitly from the result screen.
+  return NextResponse.json({
+    extraction,
+    match,
+    source: "manual",
+    reported: false,
+  });
+}
+
 export async function POST(req: NextRequest) {
+  const contentType = req.headers.get("content-type") ?? "";
+
+  if (contentType.includes("application/json")) {
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
+    }
+    return handleManual(body);
+  }
+
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
-      { error: "GEMINI_API_KEY is not set on the server." },
+      {
+        error:
+          "GEMINI_API_KEY is not set on the server. You can still check a pack by entering its registration number manually.",
+      },
       { status: 500 }
     );
   }
@@ -105,14 +177,25 @@ export async function POST(req: NextRequest) {
 
     const match = await matchExtraction(extraction);
 
-    if (match.verdict === "not_found") {
-      // Awaited (with its own internal timeout) rather than true
-      // fire-and-forget — on serverless, the function can be frozen the
-      // instant we respond, which would kill an un-awaited request.
-      await notifyUnregistered({ extraction, match, imageBase64: base64, mimeType });
-    }
+    // Photo scans of an absent number are reported automatically; the result
+    // tells the user whether that actually reached the reporting channel.
+    const reported =
+      match.verdict === "not_found"
+        ? await notifyUnregistered({
+            extraction,
+            match,
+            source: "auto",
+            imageBase64: base64,
+            mimeType,
+          })
+        : false;
 
-    return NextResponse.json({ extraction, match });
+    return NextResponse.json({
+      extraction,
+      match,
+      source: "photo",
+      reported,
+    });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
     return NextResponse.json(

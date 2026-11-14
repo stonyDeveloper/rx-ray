@@ -175,7 +175,9 @@ export async function matchExtraction(
 
       return {
         verdict: "registered",
-        reason: `Reg. number ${regNo} is Active in the Greenbook, and the printed details are consistent with "${name}". That confirms the registration — not the contents of the pack.`,
+        reason: nameUsable
+          ? `Reg. number ${regNo} is Active in the Greenbook, and the name read from the pack is consistent with "${name}". That confirms the registration — not the contents of the pack.`
+          : `Reg. number ${regNo} is Active in the Greenbook ("${name}"). That confirms the registration — not the contents of the pack.`,
         matchedProduct: toMatchedProduct(best.row),
       };
     }
@@ -261,7 +263,7 @@ export async function matchExtraction(
   if (regUsable) {
     return {
       verdict: "not_found",
-      reason: `Reg. number "${regNo}" was read clearly but is not in NAFDAC's Greenbook. That is a strong signal, not proof — report the pack and keep the packaging.`,
+      reason: `Reg. number "${regNo}" is not in NAFDAC's Greenbook. That is a strong signal, not proof — report the pack and keep the packaging.`,
       matchedProduct: null,
     };
   }
