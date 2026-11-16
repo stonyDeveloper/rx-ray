@@ -11,6 +11,7 @@ const LINKS = [
   { label: "How it works", href: "/#how" },
   { label: "What we check", href: "/#checks" },
   { label: "Data", href: "/#data" },
+  { label: "FAQ", href: "/#faq" },
 ];
 
 export default function Nav() {

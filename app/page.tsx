@@ -6,6 +6,7 @@ import HonestMatrix from "@/components/HonestMatrix";
 import HowItWorks from "@/components/HowItWorks";
 import VerdictStates from "@/components/VerdictStates";
 import Provenance from "@/components/Provenance";
+import Faq from "@/components/Faq";
 import FinalCta from "@/components/FinalCta";
 import Footer from "@/components/Footer";
 
@@ -130,6 +131,7 @@ export default async function Home() {
         <HowItWorks />
         <VerdictStates />
         <Provenance stats={stats} />
+        <Faq stats={stats} />
         <FinalCta />
       </main>
       <Footer />
