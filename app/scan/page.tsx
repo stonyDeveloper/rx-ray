@@ -1,12 +1,33 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
+import { ogImage, siteName } from "@/lib/site";
 import Nav from "@/components/Nav";
 import ScanTool from "@/components/ScanTool";
 
+const scanDescription =
+  "Photograph a medicine pack or type its NAFDAC registration number. Rx-Ray checks it against the Greenbook and explains what's verified — and what isn't.";
+
 export const metadata: Metadata = {
-  title: "Scan a pack — Rx-Ray",
-  description:
-    "Photograph a medicine pack — or type its NAFDAC registration number — and check it against the Greenbook. Registered, partial, not found, or needs a better photo.",
+  title: "Scan a pack",
+  description: scanDescription,
+  alternates: {
+    canonical: "/scan",
+  },
+  openGraph: {
+    type: "website",
+    url: "/scan",
+    siteName,
+    title: "Scan a pack — Rx-Ray",
+    description: scanDescription,
+    locale: "en_NG",
+    images: [ogImage],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Scan a pack — Rx-Ray",
+    description: scanDescription,
+    images: [ogImage.url],
+  },
 };
 
 export const dynamic = "force-dynamic";

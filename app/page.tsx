@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { siteDescription, siteName, siteUrl } from "@/lib/site";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import RegisterStrip, { type StripItem } from "@/components/RegisterStrip";
@@ -116,6 +117,29 @@ async function loadRegister() {
   }
 }
 
+const webApplicationSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: siteName,
+  url: siteUrl,
+  description: siteDescription,
+  applicationCategory: "HealthApplication",
+  operatingSystem: "Any",
+  browserRequirements: "Requires JavaScript",
+  inLanguage: "en-NG",
+  isAccessibleForFree: true,
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "NGN",
+  },
+  publisher: {
+    "@type": "Organization",
+    name: siteName,
+    url: siteUrl,
+  },
+};
+
 export default async function Home() {
   const { stats, items } = await loadRegister();
 
@@ -123,6 +147,12 @@ export default async function Home() {
     <>
       <Nav />
       <main className="flex-1">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(webApplicationSchema).replace(/</g, "\\u003c"),
+          }}
+        />
         <Hero
           stats={{ total: stats.total, active: stats.active, synced: stats.synced }}
         />

@@ -3,6 +3,14 @@ import { Instrument_Serif, Inter, JetBrains_Mono } from "next/font/google";
 import MotionProvider from "@/components/MotionProvider";
 import SmoothScroll from "@/components/SmoothScroll";
 import ScrollProgress from "@/components/ScrollProgress";
+import {
+  ogImage,
+  siteDescription,
+  siteKeywords,
+  siteName,
+  siteTitle,
+  siteUrl,
+} from "@/lib/site";
 import "./globals.css";
 
 const instrument = Instrument_Serif({
@@ -27,14 +35,58 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Rx-Ray — See through every pack",
-  description:
-    "Photograph a medicine pack. Rx-Ray reads the label and checks it against NAFDAC's Greenbook — then tells you exactly what it could verify, and what it couldn't.",
+  metadataBase: new URL(siteUrl),
+  applicationName: siteName,
+  title: {
+    default: siteTitle,
+    template: `%s — ${siteName}`,
+  },
+  description: siteDescription,
+  keywords: siteKeywords,
+  authors: [{ name: siteName, url: siteUrl }],
+  creator: siteName,
+  publisher: siteName,
+  category: "health",
+  classification: "Medicine registration verification",
+  referrer: "origin-when-cross-origin",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "Rx-Ray — See through every pack",
-    description:
-      "A NAFDAC Greenbook checker for medicine packs in Nigeria. Registered, unreadable, or not in the register — never a bare 'fake' badge.",
     type: "website",
+    url: "/",
+    siteName,
+    title: "Rx-Ray — See through every pack",
+    description: siteDescription,
+    locale: "en_NG",
+    images: [ogImage],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rx-Ray — See through every pack",
+    description: siteDescription,
+    images: [ogImage.url],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  formatDetection: {
+    telephone: false,
+    address: false,
+    email: false,
+  },
+  appleWebApp: {
+    capable: true,
+    title: "Rx-Ray",
+    statusBarStyle: "default",
   },
 };
 
@@ -46,7 +98,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
+      lang="en-NG"
       className={`${instrument.variable} ${inter.variable} ${jetbrains.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-paper text-ink">
