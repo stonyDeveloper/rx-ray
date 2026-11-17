@@ -14,7 +14,7 @@ Anyone buying or handling medicines in Nigeria: consumers, pharmacists, patent m
 
 ### Is it free?
 
-Yes. It is a capstone project, not a commercial product.
+Yes. Rx-Ray is free to use.
 
 ### Do I need an account?
 
@@ -165,7 +165,7 @@ No. It describes registration status only. It is not a statement that a medicine
 
 ### Who built it?
 
-Team Nexascale, as a capstone project. Rx-Ray is independent and is not affiliated with or endorsed by NAFDAC.
+Rx-Ray is an independent project, not affiliated with or endorsed by NAFDAC.
 
 ### What is it built with?
 

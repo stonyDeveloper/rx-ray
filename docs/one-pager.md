@@ -2,7 +2,7 @@
 
 ### See through every pack.
 
-**One-pager · Team Nexascale capstone**
+**Product one-pager**
 
 ---
 
@@ -64,4 +64,4 @@ Live: photo scanning, manual entry, four verdicts, next steps, reporting. Next: 
 
 ---
 
-**Team Nexascale** · Capstone project · Independent, not affiliated with NAFDAC.
+**Rx-Ray** · Independent, not affiliated with NAFDAC.

@@ -4,7 +4,7 @@
 
 Photograph a medicine pack. Rx-Ray reads the NAFDAC registration number printed on it, checks that number against NAFDAC's public Greenbook, and tells you exactly what it could verify — and what it couldn't.
 
-Built as a capstone project by **Team Nexascale**.
+Built and maintained by **Rx-Ray**.
 
 ---
 
@@ -262,6 +262,7 @@ The project is Vercel-ready. The SQLite snapshot is bundled into the serverless 
 3. Add the environment variables (Production and Preview):
    - `GEMINI_API_KEY` — your key
    - `DATABASE_URL` — `file:./prisma/dev.db`
+   - `NEXT_PUBLIC_SITE_URL` — your custom domain, e.g. `https://rx-ray.example` (used for canonical links, sitemap and social previews)
    - `N8N_FLAGGED_WEBHOOK_URL` — optional
 4. Deploy. The default install command runs `postinstall` → `prisma generate`; the build is `npm run build`.
 
@@ -306,6 +307,6 @@ Good first issues:
 ## Credits
 
 - Register data: [NAFDAC Greenbook](https://greenbook.nafdac.gov.ng/).
-- Built by **Team Nexascale** as a capstone project.
+- Built and maintained by **Rx-Ray**.
 
 Rx-Ray is an independent project and is not affiliated with or endorsed by NAFDAC.

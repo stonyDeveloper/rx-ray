@@ -9,8 +9,8 @@ export default function Footer() {
           <div>
             <Logo />
             <p className="mt-4 max-w-xs text-[12px] leading-relaxed text-ink-soft">
-              A NAFDAC registration checker for medicine packs. Built as a
-              capstone by Team Nexascale.
+              A NAFDAC registration checker for medicine packs. Independent,
+              not affiliated with NAFDAC.
             </p>
           </div>
 
@@ -54,7 +54,7 @@ export default function Footer() {
 
         <div className="mt-10 flex flex-col gap-2 border-t border-rule pt-5 sm:flex-row sm:items-center sm:justify-between">
           <span className="mono text-[10px] uppercase tracking-[0.14em] text-muted">
-            © 2026 Team Nexascale
+            © 2026 Rx-Ray
           </span>
           <span className="mono text-[10px] uppercase tracking-[0.14em] text-muted">
             Greenbook data © NAFDAC
